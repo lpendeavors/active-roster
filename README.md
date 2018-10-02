@@ -4,7 +4,7 @@ A desktop application, created for a local football coach, that enables them to 
 
 
 # Technologies
-Angular 6
-Angular Material
-Electron
-NeDB
+* Angular 6
+* Angular Material
+* Electron
+* NeDB
