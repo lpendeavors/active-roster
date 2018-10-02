@@ -1,0 +1,170 @@
+<div class="edit-team-container">
+  <mat-tab-group (selectedTabChange)="tabChanged($event)">
+    <mat-tab color="primary" label="Flag">
+      <table mat-table [dataSource]="flagPlayers" class="mat-elevation-z8">
+      
+        <ng-container matColumnDef="image">
+          <th mat-header-cell *matHeaderCellDef> Image </th>
+          <td mat-cell *matCellDef="let player"> <img [src]="player.image" style="width: 150px; height: auto;" /> </td>
+        </ng-container>
+      
+        <ng-container matColumnDef="first">
+          <th mat-header-cell *matHeaderCellDef> First </th>
+          <td mat-cell *matCellDef="let player"> {{player.first}} </td>
+        </ng-container>
+      
+        <ng-container matColumnDef="last">
+          <th mat-header-cell *matHeaderCellDef> Last </th>
+          <td mat-cell *matCellDef="let player"> {{player.last}} </td>
+        </ng-container>
+      
+        <ng-container matColumnDef="age">
+          <th mat-header-cell *matHeaderCellDef> Age </th>
+          <td mat-cell *matCellDef="let player"> {{player.age}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="delete">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let player"><mat-icon (click)="openConfirmDeleteDialog(player)" matListIcon>delete</mat-icon></td>
+        </ng-container>
+      
+        <tr mat-header-row *matHeaderRowDef="playerColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: playerColumns;"></tr>
+      </table>
+    </mat-tab>
+    <mat-tab label="Freshman">
+      <table mat-table [dataSource]="freshmanPlayers" class="mat-elevation-z8">
+      
+        <ng-container matColumnDef="image">
+          <th mat-header-cell *matHeaderCellDef> Image </th>
+          <td mat-cell *matCellDef="let player"> <img [src]="player.image" style="width: 150px; height: auto;" /> </td>
+        </ng-container>
+      
+        <ng-container matColumnDef="first">
+          <th mat-header-cell *matHeaderCellDef> First </th>
+          <td mat-cell *matCellDef="let player"> {{player.first}} </td>
+        </ng-container>
+      
+        <ng-container matColumnDef="last">
+          <th mat-header-cell *matHeaderCellDef> Last </th>
+          <td mat-cell *matCellDef="let player"> {{player.last}} </td>
+        </ng-container>
+      
+        <ng-container matColumnDef="age">
+          <th mat-header-cell *matHeaderCellDef> Age </th>
+          <td mat-cell *matCellDef="let player"> {{player.age}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="delete">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let player"><mat-icon (click)="openConfirmDeleteDialog(player)" matListIcon>delete</mat-icon></td>
+        </ng-container>
+      
+        <tr mat-header-row *matHeaderRowDef="playerColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: playerColumns;"></tr>
+      </table>
+    </mat-tab>
+    <mat-tab label="Junior Varsity">
+      <table mat-table [dataSource]="jvPlayers" class="mat-elevation-z8">
+      
+        <ng-container matColumnDef="image">
+          <th mat-header-cell *matHeaderCellDef> Image </th>
+          <td mat-cell *matCellDef="let player"> <img [src]="player.image" style="width: 150px; height: auto;" /> </td>
+        </ng-container>
+      
+        <ng-container matColumnDef="first">
+          <th mat-header-cell *matHeaderCellDef> First </th>
+          <td mat-cell *matCellDef="let player"> {{player.first}} </td>
+        </ng-container>
+      
+        <ng-container matColumnDef="last">
+          <th mat-header-cell *matHeaderCellDef> Last </th>
+          <td mat-cell *matCellDef="let player"> {{player.last}} </td>
+        </ng-container>
+      
+        <ng-container matColumnDef="age">
+          <th mat-header-cell *matHeaderCellDef> Age </th>
+          <td mat-cell *matCellDef="let player"> {{player.age}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="delete">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let player"><mat-icon (click)="openConfirmDeleteDialog(player)" matListIcon>delete</mat-icon></td>
+        </ng-container>
+      
+        <tr mat-header-row *matHeaderRowDef="playerColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: playerColumns;"></tr>
+      </table>
+    </mat-tab>
+    <mat-tab label="Varsity">
+      <table mat-table [dataSource]="varsityPlayers" class="mat-elevation-z8">
+      
+        <ng-container matColumnDef="image">
+          <th mat-header-cell *matHeaderCellDef> Image </th>
+          <td mat-cell *matCellDef="let player"> <img [src]="player.image" style="width: 150px; height: auto;" /> </td>
+        </ng-container>
+      
+        <ng-container matColumnDef="first">
+          <th mat-header-cell *matHeaderCellDef> First </th>
+          <td mat-cell *matCellDef="let player"> {{player.first}} </td>
+        </ng-container>
+      
+        <ng-container matColumnDef="last">
+          <th mat-header-cell *matHeaderCellDef> Last </th>
+          <td mat-cell *matCellDef="let player"> {{player.last}} </td>
+        </ng-container>
+      
+        <ng-container matColumnDef="age">
+          <th mat-header-cell *matHeaderCellDef> Age </th>
+          <td mat-cell *matCellDef="let player"> {{player.age}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="delete">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let player"><mat-icon (click)="openConfirmDeleteDialog(player)" matListIcon>delete</mat-icon></td>
+        </ng-container>
+      
+        <tr mat-header-row *matHeaderRowDef="playerColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: playerColumns;"></tr>
+      </table>
+    </mat-tab>
+    <mat-tab label="Cheer">
+      <table mat-table [dataSource]="cheerPlayers" class="mat-elevation-z8">
+      
+        <ng-container matColumnDef="image">
+          <th mat-header-cell *matHeaderCellDef> Image </th>
+          <td mat-cell *matCellDef="let player"> <img [src]="player.image" style="width: 150px; height: auto;" /> </td>
+        </ng-container>
+      
+        <ng-container matColumnDef="first">
+          <th mat-header-cell *matHeaderCellDef> First </th>
+          <td mat-cell *matCellDef="let player"> {{player.first}} </td>
+        </ng-container>
+      
+        <ng-container matColumnDef="last">
+          <th mat-header-cell *matHeaderCellDef> Last </th>
+          <td mat-cell *matCellDef="let player"> {{player.last}} </td>
+        </ng-container>
+      
+        <ng-container matColumnDef="age">
+          <th mat-header-cell *matHeaderCellDef> Age </th>
+          <td mat-cell *matCellDef="let player"> {{player.age}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="delete">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let player"><mat-icon (click)="openConfirmDeleteDialog(player)" matListIcon>delete</mat-icon></td>
+        </ng-container>
+      
+        <tr mat-header-row *matHeaderRowDef="playerColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: playerColumns;"></tr>
+      </table>
+    </mat-tab>
+  </mat-tab-group>
+</div>
+<button class="fab-bottom-left" (click)="openPrintDialog()" mat-fab>
+  <mat-icon aria-label="Print roster">print</mat-icon>
+</button>
+<button class="fab-bottom-right" (click)="openNewPlayerDialog()" mat-fab>
+  <mat-icon aria-label="Add player">add</mat-icon>
+</button>

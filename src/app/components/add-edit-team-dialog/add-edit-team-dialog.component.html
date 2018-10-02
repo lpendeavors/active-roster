@@ -1,0 +1,10 @@
+<div class="new-team-container">
+  <h4 mat-dialog-title>New Team</h4>
+  <mat-form-field class="new-team-form">
+    <input type="text" [(ngModel)]="data.name" matInput placeholder="Name">
+  </mat-form-field><br>
+  <mat-dialog-actions align="end">
+    <button (click)="closeDialog()" mat-button mat-dialog-close>Close</button>
+    <button mat-button [mat-dialog-close]="data.name" color="primary" [disabled]="!data.name">Save</button>
+  </mat-dialog-actions>
+</div>

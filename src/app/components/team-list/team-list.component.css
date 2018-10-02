@@ -1,0 +1,19 @@
+.team-list-container {
+    padding: 1.25rem;
+}
+
+.team-list-container table {
+    width: 100%;
+}
+
+.delete-team {
+    float: right;
+}
+
+.delete-team:hover {
+    cursor: pointer;
+}
+
+.mat-column-delete {
+    width: 8%;
+}

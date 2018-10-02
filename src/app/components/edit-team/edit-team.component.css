@@ -1,0 +1,47 @@
+.edit-team-container {
+    padding: 1.25rem;
+}
+
+.fab-bottom-right {
+    position: fixed;
+    top: auto;
+    right: 30px;
+    bottom: 15px;
+    left: auto;
+    z-index: 100;
+}
+
+.fab-bottom-left {
+    position: fixed;
+    bottom: 15px;
+    top: auto;
+    left: 21%;
+    z-index: 100;
+}
+
+table {
+    width: 100%;
+}
+
+.mat-table {
+    margin-top: 1.25rem;
+}
+
+.mat-column-image,
+.mat-column-first,
+.mat-column-last,
+.mat-column-age {
+    width: 23%;
+}
+
+.mat-column-delete {
+    width: 8%;
+}
+
+.mat-icon {
+    float: right;
+}
+
+.mat-icon:hover {
+    cursor: pointer;
+}
