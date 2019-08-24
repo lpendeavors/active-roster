@@ -247,6 +247,47 @@ export class PrintService {
       }
       documentDefinition.content.push(cheerTable);
     }
+    // Moms
+    if (team.moms.length > 0) {
+      documentDefinition.content.push({ text: 'Moms', style: 'teamLevelHeader' });
+      const momsTable = {
+        text: '',
+        style: 'rosterTable',
+        table: {
+          headerRows: 0,
+          body: [],
+          widths: [120, 120, 120, 120, 120, 120]
+        },
+        layout: 'noBorders'
+      };
+      let playerRow = [];
+      const sortedCheerPlayers = team.moms.sort(this.teamService.sortByLastName);
+      sortedCheerPlayers.forEach(player => {
+        const playerFullName = `${player.first} ${player.last}`;
+        const playerImage = {
+          image: player.image,
+          fit: [120, 120]
+        };
+        const playerCell = [
+          playerImage,
+          { text: playerFullName, alignment: 'center', margin: [0, 7, 0, 10] }
+        ];
+        playerRow.push(playerCell);
+        if (playerRow.length === 6) {
+          momsTable.table.body.push(playerRow);
+          playerRow = [];
+        }
+      });
+      if (playerRow.length > 0) {
+        let extraCells = 6 - playerRow.length;
+        while (extraCells > 0) {
+          playerRow.push('');
+          extraCells--;
+        }
+        momsTable.table.body.push(playerRow);
+      }
+      documentDefinition.content.push(momsTable);
+    }
     pdfMake.createPdf(documentDefinition).download(team.name);
   }
 }

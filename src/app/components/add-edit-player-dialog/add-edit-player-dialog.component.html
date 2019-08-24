@@ -1,13 +1,13 @@
 <div class="new-player-container">
   <h4 mat-dialog-title>{{ data.team.name }}</h4>
   <mat-form-field>
+    <input type="text" [(ngModel)]="data.player.playerId" matInput placeholder="ID">
+  </mat-form-field>
+  <mat-form-field>
     <input type="text" [(ngModel)]="data.player.first" matInput placeholder="First name">
   </mat-form-field>
   <mat-form-field>
     <input type="text" [(ngModel)]="data.player.last" matInput placeholder="Last name">
-  </mat-form-field>
-  <mat-form-field>
-    <input type="number" [(ngModel)]="data.player.age" matInput placeholder="Age">
   </mat-form-field>
   <mat-form-field>
     <mat-select [(ngModel)]="data.teamLevel" placeholder="Level">
@@ -16,11 +16,21 @@
       <mat-option [value]="2">Jr. Varsity</mat-option>
       <mat-option [value]="3">Varsity</mat-option>
       <mat-option [value]="4">Cheer</mat-option>
+      <mat-option [value]="5">Mom</mat-option>
     </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-select [(ngModel)]="data.player.isCoach" placeholder="Type">
+      <mat-option [value]="false">Player</mat-option>
+      <mat-option [value]="true">Coach</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field *ngIf="!data.player.isCoach">
+    <input type="date" [(ngModel)]="data.player.dateOfBirth" matInput placeholder="DOB">
   </mat-form-field>
   <input type="file" (change)="pictureAdded($event)" accept="image/*" placeholder="image">
   <mat-dialog-actions align="end">
       <button mat-button mat-dialog-close>Close</button>
-      <button mat-button [mat-dialog-close]="data" color="primary" [disabled]="!data.player.image || !data.player.first.length > 0 || !data.player.last.length > 0 || !data.player.age != 0">Save</button>
+      <button mat-button [mat-dialog-close]="data" color="primary" [disabled]="!data.player.image || !data.player.playerId || !data.player.first.length > 0 || !data.player.last.length > 0 || (!data.player.dateOfBirth == null && !player.data.isCoach)">Save</button>
     </mat-dialog-actions>
 </div>

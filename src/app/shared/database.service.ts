@@ -26,6 +26,7 @@ export class Database {
     team.jvPlayers = [];
     team.varsityPlayers = [];
     team.cheerPlayers = [];
+    team.moms = [];
 
     console.log(`Inserting team: ${JSON.stringify(team)}`);
     

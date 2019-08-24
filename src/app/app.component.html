@@ -2,11 +2,11 @@
 <mat-sidenav-container class="main-container">
   <mat-sidenav class="main-nav" mode="side" opened>
     <mat-nav-list>
-      <a routerLink="/team-list" routerLinkActive="active" mat-list-item><mat-icon matListIcon>list</mat-icon> All Teams </a>
-      <a *ngFor="let team of teams" routerLink="/edit-team/{{team._id}}" routerLinkActive="active" mat-list-item><mat-icon matListIcon>people</mat-icon> {{ team.name }} </a>
-      <a (click)="openNewTeamDialog()" mat-list-item><mat-icon matListIcon>add</mat-icon> New Team </a>
+      <a routerLink="/team-list" routerLinkActive="active" mat-list-item>All Teams </a>
+      <a *ngFor="let team of teams" routerLink="/edit-team/{{team._id}}" routerLinkActive="active" mat-list-item> {{ team.name }} </a>
+      <a (click)="openNewTeamDialog()" mat-list-item> New Team </a>
     </mat-nav-list>
-  </mat-sidenav>
+  </mat-sidenav> 
   <mat-sidenav-content>
     <router-outlet></router-outlet>
   </mat-sidenav-content>

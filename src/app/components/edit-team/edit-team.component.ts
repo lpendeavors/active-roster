@@ -20,10 +20,16 @@ export class EditTeamComponent implements OnInit {
 
   team: Team;
   flagPlayers: Player[] = [];
+  flagCoaches: Player[] = [];
   freshmanPlayers: Player[] = [];
+  freshmanCoaches: Player[] = [];
   jvPlayers: Player[] = [];
+  jvCoaches: Player[] = [];
   varsityPlayers: Player[] = [];
+  varsityCoaches: Player[] = [];
   cheerPlayers: Player[] = [];
+  cheerCoaches: Player[] = [];
+  teamMoms: Player[] = [];
 
   playerColumns: string[] = ['image', 'first', 'last', 'age', 'delete'];
   
@@ -48,10 +54,13 @@ export class EditTeamComponent implements OnInit {
 
   openNewPlayerDialog(): void {
     const newPlayer: Player = {
+      id: '',
+      playerId: '',
       first: '',
       last: '',
-      age: 0,
-      image: ''
+      dateOfBirth: null,
+      image: '',
+      isCoach: false
     };
     const dialogRef = this.dialog.open(AddEditPlayerDialogComponent, {
       width: '450px',
@@ -78,11 +87,17 @@ export class EditTeamComponent implements OnInit {
   }
 
   openPrintDialog(): void {
-    if (this.flagPlayers.length === 0 
+    if (this.flagPlayers.length === 0
+      && this.flagCoaches.length === 0
       && this.freshmanPlayers.length === 0 
+      && this.freshmanCoaches.length === 0
       && this.jvPlayers.length === 0 
+      && this.jvCoaches.length === 0
       && this.varsityPlayers.length === 0
-      && this.cheerPlayers.length === 0) {
+      && this.varsityCoaches.length === 0
+      && this.cheerPlayers.length === 0
+      && this.cheerCoaches.length === 0
+      && this.teamMoms.length === 0) {
       this.snackBar.open("You do not have any players to print", null, { duration: 5000 });
     } else {
       this.printService.print(this.team);
@@ -110,6 +125,8 @@ export class EditTeamComponent implements OnInit {
       this.team.varsityPlayers.push(player);
     } else if (teamLevel === 4) {
       this.team.cheerPlayers.push(player);
+    } else if (teamLevel === 5) {
+      this.team.moms.push(player);
     }
     this.updateTeam();
   }
@@ -129,6 +146,9 @@ export class EditTeamComponent implements OnInit {
     } else if (teamLevel === 4) {
       const playerIndex = this.team.cheerPlayers.indexOf(player);
       this.team.cheerPlayers.splice(playerIndex, 1);
+    } else if (teamLevel === 5) {
+      const playerIndex = this.team.moms.indexOf(player);
+      this.team.moms.splice(playerIndex);
     }
     this.updateTeam();
   }
@@ -143,16 +163,33 @@ export class EditTeamComponent implements OnInit {
   }
 
   private sortTeamLevels(): void {
-    this.flagPlayers = this.team.flagPlayers;
+    this.flagPlayers = this.team.flagPlayers.filter(p => p.isCoach === false);
     if (this.flagPlayers.length > 0) this.flagPlayers.sort(this.teamService.sortByLastName);
-    this.freshmanPlayers = this.team.freshmanPlayers;
+    this.flagCoaches = this.team.flagPlayers.filter(p => p.isCoach === true);
+    if (this.flagCoaches.length > 0) this.flagCoaches.sort(this.teamService.sortByLastName);
+
+    this.freshmanPlayers = this.team.freshmanPlayers.filter(p => p.isCoach === false);
     if (this.freshmanPlayers.length > 0) this.freshmanPlayers.sort(this.teamService.sortByLastName);
-    this.jvPlayers = this.team.jvPlayers;
+    this.freshmanCoaches = this.team.freshmanPlayers.filter(p => p.isCoach === true);
+    if (this.freshmanCoaches.length > 0) this.freshmanCoaches.sort(this.teamService.sortByLastName);
+
+    this.jvPlayers = this.team.jvPlayers.filter(p => p.isCoach === false);
     if (this.jvPlayers.length > 0) this.jvPlayers.sort(this.teamService.sortByLastName);
-    this.varsityPlayers = this.team.varsityPlayers;
+    this.jvCoaches = this.team.jvPlayers.filter(p => p.isCoach === true);
+    if (this.jvCoaches.length > 0) this.jvPlayers.sort(this.teamService.sortByLastName);
+
+    this.varsityPlayers = this.team.varsityPlayers.filter(p => p.isCoach === false);
     if (this.varsityPlayers.length > 0) this.varsityPlayers.sort(this.teamService.sortByLastName);
-    this.cheerPlayers = this.team.cheerPlayers;
+    this.varsityCoaches = this.team.varsityPlayers.filter(p => p.isCoach === true);
+    if (this.varsityCoaches.length > 0) this.varsityCoaches.sort(this.teamService.sortByLastName);
+
+    this.cheerPlayers = this.team.cheerPlayers.filter(p => p.isCoach === false);
     if (this.cheerPlayers.length > 0) this.cheerPlayers.sort(this.teamService.sortByLastName);
+    this.cheerCoaches = this.team.cheerPlayers.filter(p => p.isCoach === true);
+    if (this.cheerCoaches.length > 0) this.cheerCoaches.sort(this.teamService.sortByLastName);
+
+    this.teamMoms = this.team.moms;
+    if (this.teamMoms.length > 0) this.teamMoms.sort(this.teamService.sortByLastName);
   }
 
 }

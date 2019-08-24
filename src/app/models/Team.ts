@@ -7,5 +7,6 @@ export interface Team {
     freshmanPlayers?: Player[],
     jvPlayers?: Player[],
     varsityPlayers?: Player[],
-    cheerPlayers?: Player[]
+    cheerPlayers?: Player[],
+    moms?: Player[],
 };

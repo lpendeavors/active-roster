@@ -1,6 +1,9 @@
 export interface Player {
-    first: string,
-    last: string,
-    age: Number,
-    image: string
+  id: string,
+  playerId: string,
+  first: string,
+  last: string,
+  dateOfBirth: Date,
+  image: string,
+  isCoach: boolean,
 }
