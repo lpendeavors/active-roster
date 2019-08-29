@@ -30,7 +30,7 @@
   </mat-form-field>
   <input type="file" (change)="pictureAdded($event)" accept="image/*" placeholder="image">
   <mat-dialog-actions align="end">
-      <button mat-button mat-dialog-close>Close</button>
-      <button mat-button [mat-dialog-close]="data" color="primary" [disabled]="!data.player.image || !data.player.playerId || !data.player.first.length > 0 || !data.player.last.length > 0 || (!data.player.dateOfBirth == null && !player.data.isCoach)">Save</button>
-    </mat-dialog-actions>
+    <button mat-button mat-dialog-close>Close</button>
+    <button mat-button [mat-dialog-close]="data" color="primary" [disabled]="!data.player.image || !data.player.playerId || !(data.player.first.length > 0) || !(data.player.last.length > 0) || (!data.player.dateOfBirth == null && !data.player.isCoach)">Save</button>
+  </mat-dialog-actions>
 </div>

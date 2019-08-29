@@ -28,6 +28,12 @@ export class TeamService {
   }
 
   addTeam(team: Team): Promise<Team> {
+    team.flagPlayers = [];
+    team.freshmanPlayers = [];
+    team.jvPlayers = [];
+    team.varsityPlayers = [];
+    team.cheerPlayers = [];
+    team.moms = [];
     return this.db.insertTeam(team);
   }
 
@@ -49,4 +55,8 @@ export class TeamService {
       return 0;
     }
   };
+
+  saveLegacyTeam(team: Team): Promise<void> {
+    return this.db.saveLegacyTeam(team);
+  }
 }

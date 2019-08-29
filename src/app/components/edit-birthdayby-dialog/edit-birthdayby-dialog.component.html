@@ -1,0 +1,10 @@
+<div class="birthdayby-container">
+  <h4 mat-dialog-title>Change Date</h4>
+  <mat-form-field class="bday-by-form">
+    <input type="date" [ngModel]="data.birthdayBy | date:'MM-dd-yyyy'" matInput>
+  </mat-form-field><br>
+  <mat-dialog-actions align="end">
+    <button (click)="closeDialog()" mat-button mat-dialog-close>Close</button>
+    <button mat-button [mat-dialog-close]="data.birthdayBy" color="primay" [disabled]="!data.birthdayBy">Save</button>
+  </mat-dialog-actions>
+</div>

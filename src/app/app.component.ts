@@ -1,4 +1,5 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, NgZone } from '@angular/core';
+import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material';
 
 import { AddEditTeamDialogComponent } from './components/add-edit-team-dialog/add-edit-team-dialog.component';
@@ -17,9 +18,13 @@ export class AppComponent implements OnInit, OnDestroy {
 
   teams: Team[] = [];
   
-  private deleteTeamSubscription: Subscription;
+  private refreshTeamSubscription: Subscription;
   
-  constructor(public dialog: MatDialog, private teamService: TeamService) {}
+  constructor(
+    public dialog: MatDialog, 
+    private teamService: TeamService, 
+    private router: Router,
+    private zone: NgZone) {}
 
   openNewTeamDialog(): void {
     const dialogRef = this.dialog.open(AddEditTeamDialogComponent, {
@@ -36,19 +41,23 @@ export class AppComponent implements OnInit, OnDestroy {
     });
   }
 
+  showSettings(): void {
+    this.router.navigate(['/settings']);
+  }
+
   ngOnInit(): void {
     this.getAllTeams();
-    this.deleteTeamSubscription = this.teamService.refreshTeams()
+    this.refreshTeamSubscription = this.teamService.refreshTeams()
       .subscribe(() => this.getAllTeams());
   }
 
   ngOnDestroy(): void {
-    this.deleteTeamSubscription.unsubscribe();
+    this.refreshTeamSubscription.unsubscribe();
   }
 
   private getAllTeams(): void {
     this.teamService.getAllTeams()
-      .then(teams => this.teams = teams)
+      .then(teams => this.zone.run(() => this.teams = teams))
       .catch(err => alert(err));
   }
 

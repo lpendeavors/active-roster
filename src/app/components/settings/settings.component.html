@@ -1,0 +1,24 @@
+<div class="settings-container">
+  <h2>Settings</h2>
+
+  <h4 style="margin-bottom: 10px;">Birthday By</h4>
+  <span *ngIf="birthdayBy">
+    {{ birthdayBy | date:'shortDate' }} &nbsp;&nbsp;
+    <button (click)="openEditBirthdaybyDialog()" mat-button>Change</button></span>
+  <br>
+  <mat-list>
+    <h4 style="margin-bottom: 10px;">Import/Export</h4>
+    <mat-list-item>
+      <button (click)="importTeams()" mat-button>Import existing file</button>
+      <button (click)="exportTeams()" mat-button>Export current teams</button>
+      <button (click)="legacyImport()" mat-button>Import legacy spreadsheet</button>
+    </mat-list-item>
+  </mat-list>
+  <br>
+  <mat-list>
+    <h4 style="margin-bottom: 10px;">Bulk Image Upload</h4>
+    <mat-list-item>
+      <button (click)="uploadImages()" mat-button>Upload images</button>
+    </mat-list-item>
+  </mat-list>
+</div>

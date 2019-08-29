@@ -1,10 +1,16 @@
-<mat-toolbar>Active Roster</mat-toolbar>
+<mat-toolbar>
+  <span>Active Roster</span>
+  <span class="example-fill-remaining-space"></span>
+  <span>
+    <mat-icon class="settings" (click)="showSettings()" matListIcon>settings</mat-icon>
+  </span>
+</mat-toolbar>
 <mat-sidenav-container class="main-container">
   <mat-sidenav class="main-nav" mode="side" opened>
     <mat-nav-list>
       <a routerLink="/team-list" routerLinkActive="active" mat-list-item>All Teams </a>
       <a *ngFor="let team of teams" routerLink="/edit-team/{{team._id}}" routerLinkActive="active" mat-list-item> {{ team.name }} </a>
-      <a (click)="openNewTeamDialog()" mat-list-item> New Team </a>
+      <a (click)="openNewTeamDialog()" mat-list-item> Create Team </a>
     </mat-nav-list>
   </mat-sidenav> 
   <mat-sidenav-content>
