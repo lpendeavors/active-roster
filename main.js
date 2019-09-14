@@ -22,12 +22,12 @@ function createWindow() {
   win.setResizable(false);
   win.on('unmaximize', () => win.maximize());
 
-  // if (serve) {
-    // require('electron-reload')(__dirname, {
-    //   electron: require(`${__dirname}/node_modules/electron`)
-    // });
-    // win.loadURL('http://localhost:4200');
-  // } else {
+  if (serve) {
+    require('electron-reload')(__dirname, {
+      electron: require(`${__dirname}/node_modules/electron`)
+    });
+    win.loadURL('http://localhost:4200');
+  } else {
     win.loadURL(
       url.format({
         pathname: path.join(__dirname, `/dist/index.html`),
@@ -35,11 +35,11 @@ function createWindow() {
         slashes: true
       })
     );
-  // }
+  }
 
-  // if (serve) {
+  if (serve) {
     win.webContents.openDevTools();
-  // }
+  }
 
   win.on('closed', () => {
     win = null;
@@ -74,7 +74,14 @@ ipc.on('legacy-import', (event, arg) => {
   console.log(`Opening workbook located at ${arg}...`);
   
   const workbook = xlsx.readFile(arg);
-  const team = arg.toString().split(/[\\]/)[4].split('.')[0];
+  let team;
+
+  if (process.platform == "linux") {
+    team = arg.toString().split("/").slice(-1)[0].split(".")[0];
+  } else {
+    team = arg.toString().split(/[\\]/).slice(-1)[0].split('.')[0];
+  }
+  
   win.webContents.send('import-complete', { team, workbook });
 });
 
@@ -97,7 +104,12 @@ ipc.on('attach-images', (event, arg) => {
 
     for (let i = 0; i < files.length; i++) {
       if (files[i]) {
-        const possibleDir = `${imageLocation}\\${files[i]}`;
+        let possibleDir;
+        if (process.platform = "linux") {
+          possibleDir = `${imageLocation}/${files[i]}`;
+        } else {
+          possibleDir = `${imageLocation}\\${files[i]}`
+        }
         if (fs.lstatSync(possibleDir).isDirectory()) {
           dirs.push(possibleDir);
         } else {
@@ -115,7 +127,12 @@ ipc.on('attach-images', (event, arg) => {
 
     if (dirs.length > 0) {
       for (let i = 0; i < dirs.length; i++) {
-        const folder = dirs[i].split('\\').pop();
+        let folder;
+        if (process.platform == "linux") {
+          folder = dirs[i].split('/').pop();
+        } else {
+          folder = dirs[i].split('\\').pop();
+        }
         let matchingTeam;
         
         for (let t = 0; t < teams.length; t++) {
@@ -127,13 +144,19 @@ ipc.on('attach-images', (event, arg) => {
   
         fs.readdir(dirs[i], (err, files) => {
           for (let f = 0; f < files.length; f++) {
-            const fileLocation = `${dirs[i]}\\${files[f]}`;
+            let fileLocation;
+            if (process.platform == "linux") {
+              fileLocation = `${dirs[i]}/${files[f]}`;
+            } else {
+              fileLocation = `${dirs[i]}\\${files[f]}`;
+            }
             const id = getId(fileLocation);
             const imgString = processImage(fileLocation);
             attachImage(imgString, id, matchingTeam);
 
             if (f === files.length-1 && i === dirs.length-1) {
               win.webContents.send('import-content', teams);
+              console.log("done with images");
             }
           }
         });
@@ -147,7 +170,11 @@ ipc.on('attach-images', (event, arg) => {
     }
 
     function getId(image) {
-      return image.split('\\')[6].split('.')[0];
+      if (process.platform == "linux") {
+        return image.split('/').splice(-1)[0].split('.')[0];
+      } else {
+        return image.split('\\').splice(-1)[0].split('.')[0];
+      }
     }
 
     function attachImage(image, playerId, matchingTeam) {

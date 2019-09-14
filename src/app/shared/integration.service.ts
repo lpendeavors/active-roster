@@ -113,7 +113,8 @@ export class IntegrationService {
       title: "Active Roster Export",
       buttonLabel: "Open",
       filters: [
-        { name: 'xlsx', extensions: ['xlsx'] }
+        { name: 'xlsx', extensions: ['xlsx'] },
+        { name: 'xls', extensions: ['xls'] }
       ]
     };
     
