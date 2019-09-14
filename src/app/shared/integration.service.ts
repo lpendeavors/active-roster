@@ -3,11 +3,15 @@ import { MatSnackBar } from '@angular/material';
 import { Database } from './database.service';
 import { LegacyColumnMappings } from '../models/LegacyColumnMappings';
 
-import { ElectronService } from 'ngx-electron';
 import * as xlsx from 'xlsx';
 import { Team } from '../models/Team';
 import { TeamService } from '../shared/team.service';
 import { Player } from '../models/Player';
+import { ImageService } from '../shared/image.service';
+
+import * as resizebase64 from 'resize-base64';
+
+declare var electron: any;
 
 @Injectable({
   providedIn: 'root'
@@ -15,26 +19,28 @@ import { Player } from '../models/Player';
 export class IntegrationService {
 
   constructor(
-    private db: Database, 
-    private electron: ElectronService,
+    private db: Database,
     private teamService: TeamService,
+    private imageService: ImageService,
     private snackBar: MatSnackBar) {
-      this.electron.ipcRenderer.on("import-complete", (event, arg) => {
+      electron.ipcRenderer.on("import-complete", (event, arg) => {
         if (arg) {
           const newTeam = this.processSpreadsheet(arg.workbook, arg.team);
           this.teamService.saveLegacyTeam(newTeam)
             .then(() => this.teamService.shouldRefresh.next());
         }
       });
-      this.electron.ipcRenderer.on("export-complete", (event, arg) => {
+      electron.ipcRenderer.on("export-complete", (event, arg) => {
         if (arg) {
           this.snackBar.open("Team export successful");
         }
       });
-      this.electron.ipcRenderer.on("import-content", (event, arg) => {
+      electron.ipcRenderer.on("import-content", (event, arg) => {
         if (arg) {
-          this.teamService.saveLegacyTeam(arg)
-            .then(() => this.teamService.shouldRefresh.next());
+          const teams = arg as Team[];
+          for (let t = 0; t < teams.length; t++) {
+            this.teamService.saveLegacyTeam(this.processImages(teams[t]));
+          }
         }
       });
   }
@@ -51,10 +57,11 @@ export class IntegrationService {
         this.snackBar.open("No teams for image import", null, { duration: 3000 });
         return;
       }
-      this.electron.remote.dialog.showOpenDialog(options, (filename) => {
+
+      electron.remote.dialog.showOpenDialog(options, (filename) => {
         if (filename) {
           const imgLocation = filename[0];
-          this.electron.ipcRenderer.send("attach-images", {
+          electron.ipcRenderer.send("attach-images", {
             teams,
             imgLocation
           });
@@ -66,14 +73,13 @@ export class IntegrationService {
   importJson() {
     const options = {
       title: "Active Roster Import",
-      buttonLabel: "Open",
-      
+      buttonLabel: "Open"
     };
 
-    this.electron.remote.dialog.showOpenDialog(options, (filename) => {
+    electron.remote.dialog.showOpenDialog(options, (filename) => {
       if (filename) {
         const location = filename[0];
-        this.electron.ipcRenderer.send("import-json", location);
+        electron.ipcRenderer.send("import-json", location);
       }
     });
   }
@@ -91,9 +97,9 @@ export class IntegrationService {
         ]
       };
       
-      this.electron.remote.dialog.showSaveDialog(options, (filename) => {
+      electron.remote.dialog.showSaveDialog(options, (filename) => {
         if (filename) {
-          this.electron.ipcRenderer.send('export-json', {
+          electron.ipcRenderer.send('export-json', {
             filename: filename,
             content: teams
           });
@@ -111,10 +117,10 @@ export class IntegrationService {
       ]
     };
     
-    this.electron.remote.dialog.showOpenDialog(options, (filename) => {
+    electron.remote.dialog.showOpenDialog(options, (filename) => {
       if (filename) {
         const location = filename[0];
-        this.electron.ipcRenderer.send("legacy-import", location);
+        electron.ipcRenderer.send("legacy-import", location);
       }
     });
   }
@@ -174,6 +180,37 @@ export class IntegrationService {
         }
       }
     }
+    return team;
+  }
+
+  private processImages(team: Team): Team {
+    team.cheerPlayers.forEach(player => {
+      if (player.image) {
+        this.imageService.resizeBase64(player.image, 150, 150).then(image => {
+          player.image = image;
+        });
+      }
+    });
+    team.flagPlayers.forEach(player => {
+      if (player.image) {
+        this.imageService.resizeBase64(player.image, 150, 150).then(image => player.image = image);
+      }
+    });
+    team.freshmanPlayers.forEach(player => {
+      if (player.image) {
+        this.imageService.resizeBase64(player.image, 150, 150).then(image => player.image = image);
+      }
+    });
+    team.jvPlayers.forEach(player => {
+      if (player.image) {
+        this.imageService.resizeBase64(player.image, 150, 150).then(image => player.image = image);
+      }
+    });
+    team.varsityPlayers.forEach(player => {
+      if (player.image) {
+        this.imageService.resizeBase64(player.image, 150, 150).then(image => player.image = image);
+      }
+    });
 
     return team;
   }

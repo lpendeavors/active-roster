@@ -129,9 +129,8 @@ export class Database {
     console.log(`Saving legacy team`);
     return new Promise((resolve, reject) => {
       return this.teamDb.find({ name: team.name }, (err: any, existingTeam: Team) => {
-        if (err) reject(err);
-        if (typeof existingTeam.name !== 'undefined') {
-          const overwrite = confirm(`The ${existingTeam.name} already exists. Would you like to overwrite?`);
+        if (typeof existingTeam[0] !== 'undefined') {
+          const overwrite = confirm(`The ${existingTeam[0].name} already exists. Would you like to overwrite?`);
           if (overwrite) {
             console.log(`Overwriting existing team: ${team._id}`);
             return this.remove(existingTeam).then(() => {

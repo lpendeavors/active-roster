@@ -3,27 +3,43 @@ const path = require('path');
 const url = require('url');
 const fs = require('fs');
 const xlsx = require('xlsx');
-const dcraw = require('dcraw');
-const ocrad = require('ocrad.js');
 
-let win;
+let win, serve;
+const args = process.argv.slice(1);
+serve = args.some(val => val === '--serve');
 
 function createWindow() {
-  win = new BrowserWindow({ width: 800, height: 600, icon: path.join(__dirname, 'assets/football_logo.png') });
+  win = new BrowserWindow({ 
+    width: 800, 
+    height: 600, 
+    icon: path.join(__dirname, 'assets/football_logo.png'),
+    webPreferences: {
+      nodeIntegration: true
+    }
+  });
   win.setMenu(null);
   win.maximize();
   win.setResizable(false);
   win.on('unmaximize', () => win.maximize());
 
-  win.loadURL(
-    url.format({
-      pathname: path.join(__dirname, `/dist/index.html`),
-      protocol: "file:",
-      slashes: true
-    })
-  );
+  // if (serve) {
+    // require('electron-reload')(__dirname, {
+    //   electron: require(`${__dirname}/node_modules/electron`)
+    // });
+    // win.loadURL('http://localhost:4200');
+  // } else {
+    win.loadURL(
+      url.format({
+        pathname: path.join(__dirname, `/dist/index.html`),
+        protocol: "file:",
+        slashes: true
+      })
+    );
+  // }
 
-  win.webContents.openDevTools();
+  // if (serve) {
+    win.webContents.openDevTools();
+  // }
 
   win.on('closed', () => {
     win = null;
@@ -79,58 +95,96 @@ ipc.on('attach-images', (event, arg) => {
     const dirs = [];
     if (err) throw err;
 
-    files.forEach(file => {
-      if (file) {
-        const possibleDir = `${imageLocation}\\${file}`;
+    for (let i = 0; i < files.length; i++) {
+      if (files[i]) {
+        const possibleDir = `${imageLocation}\\${files[i]}`;
         if (fs.lstatSync(possibleDir).isDirectory()) {
           dirs.push(possibleDir);
         } else {
-          
+          const fileLocation = `${possibleDir}`;
+          const id = getId(fileLocation);
+          const imgString = processImage(fileLocation);
+          attachImage(imgString, id, null);
+
+          if (i === files.length-1 && dirs.length === 0) {
+            win.webContents.send('import-content', teams);
+          }
         }
-      }
-    });
-
-    dirs.forEach(directory => {
-      const folder = directory.split('\\').pop();
-      let matchingTeam;
-      
-      teams.forEach(team => {
-        const name = team.name.toLowerCase();
-        if (name.includes(folder.toLowerCase())) {
-          matchingTeam = team.name;
-        }
-      });
-
-      fs.readdir(directory, (err, files) => {
-        files.forEach(file => {
-          const fileLocation = `${directory}\\${file}`;
-          const imgBuffer = processImage(fileLocation);
-          const idFromImage = getId(imgBuffer);
-        });
-      });
-    });
-
-    // return team with images
-
-
-    function processImage(file) {
-      if (path.extname(file) === ".ARW" || path.extname(file) === ".CR2") {
-        const buf = fs.readFileSync(file);
-        return dcraw(buf, { extractThumbnail: true });
-      } else if (path.extname(file) === ".JPG") {
-        return fs.readFileSync(file);
       }
     }
 
-    function getId(buffer) {
-      
+    if (dirs.length > 0) {
+      for (let i = 0; i < dirs.length; i++) {
+        const folder = dirs[i].split('\\').pop();
+        let matchingTeam;
+        
+        for (let t = 0; t < teams.length; t++) {
+          const name = teams[t].name.toLowerCase();
+          if (name.includes(folder.toLowerCase())) {
+            matchingTeam = teams[t].name;
+          }
+        }
+  
+        fs.readdir(dirs[i], (err, files) => {
+          for (let f = 0; f < files.length; f++) {
+            const fileLocation = `${dirs[i]}\\${files[f]}`;
+            const id = getId(fileLocation);
+            const imgString = processImage(fileLocation);
+            attachImage(imgString, id, matchingTeam);
+
+            if (f === files.length-1 && i === dirs.length-1) {
+              win.webContents.send('import-content', teams);
+            }
+          }
+        });
+      }
+    }
+
+    function processImage(file) {
+      if (path.extname(file).toLowerCase() == ".jpg") {
+        return Buffer.from(fs.readFileSync(file)).toString('base64');
+      }
+    }
+
+    function getId(image) {
+      return image.split('\\')[6].split('.')[0];
     }
 
     function attachImage(image, playerId, matchingTeam) {
       if (matchingTeam) {
-
-      } else {
-
+        const match = teams.filter(team => team.name === matchingTeam)[0];
+        const teamIndex = teams.indexOf(match);
+        if (match) {
+          const levelShort = playerId.split('-')[1];
+          const index = playerId.split('-')[2];
+          if (levelShort) {
+            let player;
+            switch (levelShort) {
+              case "CHEER":
+                player = teams[teamIndex].cheerPlayers[index-1];
+                if (player) teams[teamIndex].cheerPlayers[index-1].image = image;
+                break;
+              case "FLAG":
+                player = teams[teamIndex].flagPlayers[index-1];
+                if (player) teams[teamIndex].flagPlayers[index-1].image = image;
+                break;
+              case "FRESH":
+                player = teams[teamIndex].freshmanPlayers[index-1];
+                if (player) teams[teamIndex].freshmanPlayers[index-1].image = image;
+                break;
+              case "JV":
+                player = teams[teamIndex].jvPlayers[index-1];
+                if (player) teams[teamIndex].jvPlayers[index-1].image = image;
+                break;
+              case "VAR":
+                player = teams[teamIndex].varsityPlayers[index-1];
+                if (player) teams[teamIndex].varsityPlayers[index-1].image = image;
+                break;
+              default:
+                return;
+            }
+          }
+        }
       }
     }
   });

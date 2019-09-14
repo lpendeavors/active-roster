@@ -13,6 +13,44 @@ export class PrintService {
 
   constructor(private teamService: TeamService) { }
 
+  printV2(team: Team): void {
+    // Setup initial document layout
+    let documentDefinition = {
+      pageOrientation: 'landscape',
+      content: [
+        { text: team.name, style: 'teamHeader' }
+      ],
+      styles: {
+        teamHeader: {
+          fontSize: 22,
+          bold: true,
+          alignment: 'center',
+          margin: [0, 0, 0, 8]
+        },
+        teamLevelHeader: {
+          fontSize: 14,
+          alignment: 'center',
+          bold: true,
+          italics: true,
+          margin: [0, 0, 0, 8]
+        }
+      }
+    };
+
+    const levels = [
+      { level: 'cheer', list: team.cheerPlayers },
+      team.flagPlayers, 
+      team.freshmanPlayers, 
+      team.jvPlayers, 
+      team.varsityPlayers, 
+      team.moms
+    ];
+
+    levels.forEach(level => {
+      
+    })
+  }
+
   print(team: Team): void { 
     // Setup initial document layout
     let documentDefinition = {
