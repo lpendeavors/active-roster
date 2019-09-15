@@ -85,7 +85,7 @@ export class PrintService {
         table: {
           headerRows: 0,
           body: [],
-          widths: [120, 120, 120, 120, 120, 120]
+          widths: [80, 80, 80, 80, 80, 80]
         },
         layout: 'noBorders',
         pageBreak: 'after'
@@ -94,13 +94,16 @@ export class PrintService {
       const sortedFlagPlayers = team.flagPlayers.sort(this.teamService.sortByLastName);
       sortedFlagPlayers.forEach(player => {
         const playerFullName = `${player.first} ${player.last}`;
-        const playerImage = {
+        const playerImage = player.image ? {
           image: player.image,
-          fit: [120, 120]
-        };
+          fit: [80, 80]
+        } : null;
         const playerCell = [
           playerImage,
-          { text: playerFullName, alignment: 'center', margin: [0, 7, 0, 10] }
+          { text: player.playerId, alignment: 'center', margin: [0, 7, 0, 0 ], fontSize: 8 },
+          { text: playerFullName, alignment: 'center', margin: [0, 0, 0, 0], fontSize: 8 },
+          { text: new Date(player.dateOfBirth).toLocaleDateString(), alignment: 'center', margin: [0, 0, 0, 0], fontSize: 8 },
+          { text: player.weight ? player.weight : 0 , alignment : 'center', margin: [0, 0, 10, 0], fontSize: 8 }
         ];
         playerRow.push(playerCell);
         if (playerRow.length === 6) {
@@ -127,7 +130,7 @@ export class PrintService {
         table: {
           headerRows: 0,
           body: [],
-          widths: [120, 120, 120, 120, 120, 120]
+          widths: [80, 80, 80, 80, 80, 80]
         },
         layout: 'noBorders',
         pageBreak: 'after'
@@ -136,13 +139,16 @@ export class PrintService {
       const sortedFreshmanPlayers = team.freshmanPlayers.sort(this.teamService.sortByLastName);
       sortedFreshmanPlayers.forEach(player => {
         const playerFullName = `${player.first} ${player.last}`;
-        const playerImage = {
+        const playerImage = player.image ? {
           image: player.image,
-          fit: [120, 120]
-        };
+          fit: [80, 80]
+        } : null;
         const playerCell = [
           playerImage,
-          { text: playerFullName, alignment: 'center', margin: [0, 7, 0, 10] }
+          { text: player.playerId, alignment: 'center', margin: [0, 7, 0, 0 ],  fontSize: 8  },
+          { text: playerFullName, alignment: 'center', margin: [0, 0, 0, 0] , fontSize: 8 },
+          { text: new Date(player.dateOfBirth).toLocaleDateString(), alignment: 'center', margin: [0, 0, 0, 0] , fontSize: 8 },
+          { text: player.weight ? player.weight : 0 , alignment : 'center', margin: [0, 0, 10, 0], fontSize: 8 }
         ];
         playerRow.push(playerCell);
         if (playerRow.length === 6) {
@@ -169,7 +175,7 @@ export class PrintService {
         table: {
           headerRows: 0,
           body: [],
-          widths: [120, 120, 120, 120, 120, 120]
+          widths: [80, 80, 80, 80, 80, 80]
         },
         layout: 'noBorders',
         pageBreak: 'after'
@@ -178,13 +184,16 @@ export class PrintService {
       const sortedJVPlayers = team.jvPlayers.sort(this.teamService.sortByLastName);
       sortedJVPlayers.forEach(player => {
         const playerFullName = `${player.first} ${player.last}`;
-        const playerImage = {
+        const playerImage = player.image ? {
           image: player.image,
-          fit: [120, 120]
-        };
+          fit: [80, 80]
+        } : null;
         const playerCell = [
           playerImage,
-          { text: playerFullName, alignment: 'center', margin: [0, 7, 0, 10] }
+          { text: player.playerId, alignment: 'center', margin: [0, 7, 0, 0 ],  fontSize: 8  },
+          { text: playerFullName, alignment: 'center', margin: [0, 0, 0, 0] , fontSize: 8 },
+          { text: new Date(player.dateOfBirth).toLocaleDateString(), alignment: 'center', margin: [0, 0, 0, 0] , fontSize: 8 },
+          { text: player.weight ? player.weight : 0 , alignment : 'center', margin: [0, 0, 10, 0], fontSize: 8 }
         ];
         playerRow.push(playerCell);
         if (playerRow.length === 6) {
@@ -211,7 +220,7 @@ export class PrintService {
         table: {
           headerRows: 0,
           body: [],
-          widths: [120, 120, 120, 120, 120, 120]
+          widths: [80, 80, 80, 80, 80, 80]
         },
         layout: 'noBorders',
         pageBreak: 'after'
@@ -220,13 +229,16 @@ export class PrintService {
       const sortedVarsityPlayers = team.varsityPlayers.sort(this.teamService.sortByLastName);
       sortedVarsityPlayers.forEach(player => {
         const playerFullName = `${player.first} ${player.last}`;
-        const playerImage = {
+        const playerImage = player.image ? {
           image: player.image,
-          fit: [120, 120]
-        };
+          fit: [80, 80]
+        } : null;
         const playerCell = [
           playerImage,
-          { text: playerFullName, alignment: 'center', margin: [0, 7, 0, 10] }
+          { text: player.playerId, alignment: 'center', margin: [0, 7, 0, 0 ],  fontSize: 8  },
+          { text: playerFullName, alignment: 'center', margin: [0, 0, 0, 0] , fontSize: 8 },
+          { text: new Date(player.dateOfBirth).toLocaleDateString(), alignment: 'center', margin: [0, 0, 0, 0] , fontSize: 8 },
+          { text: player.weight ? player.weight : 0 , alignment : 'center', margin: [0, 0, 10, 0], fontSize: 8 }
         ];
         playerRow.push(playerCell);
         if (playerRow.length === 6) {
@@ -253,7 +265,7 @@ export class PrintService {
         table: {
           headerRows: 0,
           body: [],
-          widths: [120, 120, 120, 120, 120, 120]
+          widths: [80, 80, 80, 80, 80, 80]
         },
         layout: 'noBorders'
       };
@@ -261,13 +273,16 @@ export class PrintService {
       const sortedCheerPlayers = team.cheerPlayers.sort(this.teamService.sortByLastName);
       sortedCheerPlayers.forEach(player => {
         const playerFullName = `${player.first} ${player.last}`;
-        const playerImage = {
+        const playerImage = player.image ? {
           image: player.image,
-          fit: [120, 120]
-        };
+          fit: [80, 80]
+        } : null;
         const playerCell = [
           playerImage,
-          { text: playerFullName, alignment: 'center', margin: [0, 7, 0, 10] }
+          { text: player.playerId, alignment: 'center', margin: [0, 7, 0, 0 ],  fontSize: 8  },
+          { text: playerFullName, alignment: 'center', margin: [0, 0, 0, 0] , fontSize: 8 },
+          { text: new Date(player.dateOfBirth).toLocaleDateString(), alignment: 'center', margin: [0, 0, 0, 0] , fontSize: 8 },
+          { text: player.weight ? player.weight : 0 , alignment : 'center', margin: [0, 0, 10, 0], fontSize: 8 }
         ];
         playerRow.push(playerCell);
         if (playerRow.length === 6) {
@@ -294,7 +309,7 @@ export class PrintService {
         table: {
           headerRows: 0,
           body: [],
-          widths: [120, 120, 120, 120, 120, 120]
+          widths: [80, 80, 80, 80, 80, 80]
         },
         layout: 'noBorders'
       };
@@ -302,13 +317,16 @@ export class PrintService {
       const sortedCheerPlayers = team.moms.sort(this.teamService.sortByLastName);
       sortedCheerPlayers.forEach(player => {
         const playerFullName = `${player.first} ${player.last}`;
-        const playerImage = {
+        const playerImage = player.image ? {
           image: player.image,
-          fit: [120, 120]
-        };
+          fit: [80, 80]
+        } : null;
         const playerCell = [
           playerImage,
-          { text: playerFullName, alignment: 'center', margin: [0, 7, 0, 10] }
+          { text: player.playerId, alignment: 'center', margin: [0, 7, 0, 0 ],  fontSize: 8  },
+          { text: playerFullName, alignment: 'center', margin: [0, 0, 0, 0] , fontSize: 8 },
+          { text: new Date(player.dateOfBirth).toLocaleDateString(), alignment: 'center', margin: [0, 0, 0, 0] , fontSize: 8 },
+          { text: player.weight ? player.weight : 0 , alignment : 'center', margin: [0, 0, 10, 0], fontSize: 8 }
         ];
         playerRow.push(playerCell);
         if (playerRow.length === 6) {

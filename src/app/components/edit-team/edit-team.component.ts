@@ -60,7 +60,7 @@ export class EditTeamComponent implements OnInit {
       last: '',
       dateOfBirth: null,
       image: '',
-      isCoach: false
+      isCoach: false,
     };
     const dialogRef = this.dialog.open(AddEditPlayerDialogComponent, {
       width: '450px',

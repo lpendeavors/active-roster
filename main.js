@@ -37,9 +37,9 @@ function createWindow() {
     );
   }
 
-  if (serve) {
+  // if (serve) {
     win.webContents.openDevTools();
-  }
+  // }
 
   win.on('closed', () => {
     win = null;
@@ -113,13 +113,24 @@ ipc.on('attach-images', (event, arg) => {
         if (fs.lstatSync(possibleDir).isDirectory()) {
           dirs.push(possibleDir);
         } else {
+          let matchingTeam;
+          let teamIndex;
+        
+          for (let t = 0; t < teams.length; t++) {
+            const name = teams[t].name.toLowerCase();
+            if (name.includes(imageLocation.split('/').splice(-1)[0].toLowerCase())) {
+              matchingTeam = teams[t].name;
+              teamIndex = teams.indexOf(teams[t]);
+            }
+          }
           const fileLocation = `${possibleDir}`;
           const id = getId(fileLocation);
           const imgString = processImage(fileLocation);
-          attachImage(imgString, id, null);
+          attachImage(imgString, id, matchingTeam);
 
           if (i === files.length-1 && dirs.length === 0) {
-            win.webContents.send('import-content', teams);
+            console.log("done with images");
+            win.webContents.send('import-content', [teams[teamIndex]]);
           }
         }
       }
@@ -134,11 +145,13 @@ ipc.on('attach-images', (event, arg) => {
           folder = dirs[i].split('\\').pop();
         }
         let matchingTeam;
+        let teamIndex;
         
         for (let t = 0; t < teams.length; t++) {
           const name = teams[t].name.toLowerCase();
           if (name.includes(folder.toLowerCase())) {
             matchingTeam = teams[t].name;
+            teamIndex = teams.indexOf(teams[t]);
           }
         }
   
@@ -155,7 +168,7 @@ ipc.on('attach-images', (event, arg) => {
             attachImage(imgString, id, matchingTeam);
 
             if (f === files.length-1 && i === dirs.length-1) {
-              win.webContents.send('import-content', teams);
+              win.webContents.send('import-content', [teams[teamIndex]]);
               console.log("done with images");
             }
           }

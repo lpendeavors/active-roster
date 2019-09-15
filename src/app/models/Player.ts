@@ -6,4 +6,5 @@ export interface Player {
   dateOfBirth: Date,
   image: string,
   isCoach: boolean,
+  weight?: number,
 }

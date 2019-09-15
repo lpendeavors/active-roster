@@ -150,6 +150,7 @@ export class IntegrationService {
         const idNum = worksheet[`${LegacyColumnMappings.ID}${i}`].v;
 
         const excelBirthdate = worksheet[`${LegacyColumnMappings.BIRTH_DATE}${i}`].v;
+        const weight = worksheet[`${LegacyColumnMappings.WEIGHT}${i}`]  ? worksheet[`${LegacyColumnMappings.WEIGHT}${i}`].v : null;
         
         const player: Player = {
           id: `${idTeam}-${idLevel}-${idNum}`,
@@ -158,7 +159,8 @@ export class IntegrationService {
           playerId: `${idTeam}-${idLevel}-${idNum}`,
           dateOfBirth: new Date((excelBirthdate - (25567 + 1))*86400*1000),
           isCoach: false,
-          image: ''
+          image: '',
+          weight: weight,
         };
 
         const teamLevel = worksheet[`${LegacyColumnMappings.LEVEL}${i}`].v.toLowerCase();
